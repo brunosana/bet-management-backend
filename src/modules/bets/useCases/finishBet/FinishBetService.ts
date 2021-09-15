@@ -15,7 +15,6 @@ interface IRequest {
         },
     ];
 }
-// PRECISA ENVIAR OS BETS COM O RESULTADO DAS APOSTAS
 
 class FinishBetService {
     public async execute({ userId, betId, bets }: IRequest): Promise<IBet> {
