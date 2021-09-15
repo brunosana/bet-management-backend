@@ -32,6 +32,9 @@ export default function isAuthenticated(
 
         return next();
     } catch (err) {
+        if (err.message === 'jwt expired') {
+            throw new AppError('You must be logged to access this route', 401);
+        }
         throw new Error('Invalid JWT Token');
     }
 }

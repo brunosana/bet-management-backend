@@ -82,7 +82,8 @@
         "@typescript-eslint/no-unused-vars": ["error", {
             "argsIgnorePattern": "_"
         }],
-        "no-return-assign": "off"
+        "no-return-assign": "off",
+        "no-plusplus": "off"
     },
     "settings": {
         "import/resolver": {
