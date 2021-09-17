@@ -36,6 +36,7 @@ const BetSchema = new Schema(
                 },
                 gain: {
                     type: Boolean,
+                    default: false,
                 },
             },
         ],

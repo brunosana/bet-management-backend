@@ -1,4 +1,5 @@
 import { Bet, IBet } from '@modules/bets/models/Bet';
+import { User } from '@modules/users/models/User';
 
 import { AppError } from '@shared/errors/AppError';
 
@@ -31,6 +32,12 @@ class FinishBetService {
             throw new AppError('You must to be send some bets');
         }
 
+        const user = await User.findOne({ id: userId });
+
+        if (!user) {
+            throw new AppError('User not found', 404);
+        }
+
         const bet = await Bet.findOne({ id: betId });
         if (!bet) {
             throw new AppError('Bet not found', 404);
@@ -54,6 +61,7 @@ class FinishBetService {
         }
 
         bet.status = true;
+        let finalOdds = 1;
         for (let i = 0; i < bet.bets.length; i++) {
             if (bets[i].id !== bet.bets[i].id) {
                 throw new AppError("Bets order doesn't match");
@@ -65,11 +73,23 @@ class FinishBetService {
                 bet.status = false;
                 break;
             }
+            finalOdds *= bets[i].odds;
         }
 
         bet.finished = true;
 
+        bet.bets = bets;
+
+        if (bet.status) {
+            user.gain += bet.bet_value * finalOdds;
+        }
+
+        user.bets += 1;
+        user.balance += bet.bet_value;
+
         await bet.save();
+
+        await user.save();
 
         return bet;
     }
