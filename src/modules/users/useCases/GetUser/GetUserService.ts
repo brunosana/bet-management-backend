@@ -8,7 +8,7 @@ class GetUserService {
             throw new AppError('You must be logged to get a User', 401);
         }
 
-        const user = await User.findOne({ id: userId });
+        const user = await User.findOne({ _id: userId });
 
         user.password = undefined;
 

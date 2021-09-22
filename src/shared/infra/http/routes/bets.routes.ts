@@ -1,6 +1,7 @@
 import { createBetController } from '@modules/bets/useCases/createBet';
 import { finishBetController } from '@modules/bets/useCases/finishBet';
 import { listBetController } from '@modules/bets/useCases/listBet';
+import { updateBetController } from '@modules/bets/useCases/updateBet';
 import { Router } from 'express';
 
 import isAuthenticated from '../middlewares/isAuthenticated';
@@ -17,6 +18,9 @@ betsRouter.get('/', async (request, response) => {
 });
 betsRouter.put('/:id/finish', async (request, response) => {
     await finishBetController.handle(request, response);
+});
+betsRouter.put('/:id', async (request, response) => {
+    await updateBetController.handle(request, response);
 });
 
 export { betsRouter };

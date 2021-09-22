@@ -34,7 +34,7 @@ class CreateBetService {
             throw new AppError('Invalid Bet value');
         }
 
-        const user = await User.findOne({ id: userId });
+        const user = await User.findOne({ _id: userId });
 
         if (!user) {
             throw new AppError('User not found', 404);
@@ -53,8 +53,8 @@ class CreateBetService {
             if (!bet.odds) {
                 throw new AppError('All bets needs a Odds property');
             }
-            if (bet.odds <= 0.01) {
-                throw new AppError('All Odds needs to be greather than 0.01');
+            if (bet.odds <= 1) {
+                throw new AppError('All Odds needs to be greather than 1');
             }
             if (!bet.team) {
                 throw new AppError('All bets needs a Team');
