@@ -32,13 +32,13 @@ class FinishBetService {
             throw new AppError('You must to be send some bets');
         }
 
-        const user = await User.findOne({ id: userId });
+        const user = await User.findOne({ _id: userId });
 
         if (!user) {
             throw new AppError('User not found', 404);
         }
 
-        const bet = await Bet.findOne({ id: betId });
+        const bet = await Bet.findOne({ _id: betId });
         if (!bet) {
             throw new AppError('Bet not found', 404);
         }
@@ -49,6 +49,7 @@ class FinishBetService {
             );
         }
 
+        console.log(betId);
         if (bet.user.toString() !== userId) {
             throw new AppError(
                 'You have no permission to finish this bet',
@@ -56,6 +57,8 @@ class FinishBetService {
             );
         }
 
+        console.log(bet);
+        console.log(bet.finished);
         if (bet.finished) {
             throw new AppError('This Bet already finished');
         }
