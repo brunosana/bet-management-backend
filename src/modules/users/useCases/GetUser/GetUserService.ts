@@ -10,6 +10,10 @@ class GetUserService {
 
         const user = await User.findOne({ _id: userId });
 
+        if (!user) {
+            throw new AppError('User not found', 404);
+        }
+
         user.password = undefined;
 
         return user;
