@@ -1,4 +1,5 @@
 import { User, IUser } from '@modules/users/models/User';
+import { hash } from 'bcrypt';
 
 import { AppError } from '@shared/errors/AppError';
 
@@ -31,10 +32,12 @@ class CreateUserService {
             throw new AppError('Email in use');
         }
 
+        const hashedPassword = await hash(password, 8);
+
         const user = await User.create({
             name,
             email,
-            password,
+            password: hashedPassword,
         });
 
         if (!user) {

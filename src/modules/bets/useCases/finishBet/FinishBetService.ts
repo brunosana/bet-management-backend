@@ -49,7 +49,6 @@ class FinishBetService {
             );
         }
 
-        console.log(betId);
         if (bet.user.toString() !== userId) {
             throw new AppError(
                 'You have no permission to finish this bet',
@@ -57,8 +56,6 @@ class FinishBetService {
             );
         }
 
-        console.log(bet);
-        console.log(bet.finished);
         if (bet.finished) {
             throw new AppError('This Bet already finished');
         }
