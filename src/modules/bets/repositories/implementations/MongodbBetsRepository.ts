@@ -5,10 +5,23 @@ import { IBetsRepository } from '../IBetsRepository';
 import { ICreateBet } from '../irequests/ICreateBet';
 
 class MongodbBetsRepository implements IBetsRepository {
+    private static INSTANCE: MongodbBetsRepository;
+
+    // eslint-disable-next-line
+    private constructor() {}
+
+    public static getInstance(): MongodbBetsRepository {
+        if (!MongodbBetsRepository.INSTANCE) {
+            MongodbBetsRepository.INSTANCE = new MongodbBetsRepository();
+        }
+        return MongodbBetsRepository.INSTANCE;
+    }
+
     async findByUser(id: string): Promise<Array<IBet>> {
         const bets = await Bet.find({ user: id });
         return bets;
     }
+
     async save(bet: IBet): Promise<IBet> {
         const betToSave = await Bet.findOne({ _id: bet.id });
         betToSave.bet_value = bet.bet_value;

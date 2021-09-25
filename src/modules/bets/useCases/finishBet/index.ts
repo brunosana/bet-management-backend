@@ -3,7 +3,7 @@ import { MongodbBetsRepository } from '@modules/bets/repositories/implementation
 import { FinishBetController } from './FinishBetController';
 import { FinishBetService } from './FinishBetService';
 
-const mongodbBetsRepository = new MongodbBetsRepository();
+const mongodbBetsRepository = MongodbBetsRepository.getInstance();
 const finishBetService = new FinishBetService(mongodbBetsRepository);
 const finishBetController = new FinishBetController(finishBetService);
 

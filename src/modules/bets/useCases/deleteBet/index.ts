@@ -3,7 +3,7 @@ import { MongodbBetsRepository } from '@modules/bets/repositories/implementation
 import { DeleteBetController } from './DeleteBetController';
 import { DeleteBetService } from './DeleteBetService';
 
-const mongodbBetsRepository = new MongodbBetsRepository();
+const mongodbBetsRepository = MongodbBetsRepository.getInstance();
 const deleteBetService = new DeleteBetService(mongodbBetsRepository);
 const deleteBetController = new DeleteBetController(deleteBetService);
 
