@@ -1,4 +1,5 @@
-import { Bet, IBet } from '@modules/bets/models/Bet';
+import { IBet } from '@modules/bets/models/Bet';
+import { IBetsRepository } from '@modules/bets/repositories/IBetsRepository';
 import { Option } from '@modules/options/models/Option';
 import { User } from '@modules/users/models/User';
 
@@ -14,6 +15,8 @@ interface IRequest {
 }
 
 class UpdateBetService {
+    constructor(private betsRepository: IBetsRepository) {}
+
     public async execute({ betId, userId, newBet }: IRequest): Promise<IBet> {
         if (!userId) {
             throw new AppError('You must be logged to update a bet', 401);
@@ -42,7 +45,7 @@ class UpdateBetService {
             throw new AppError('User not found', 404);
         }
 
-        const bet = await Bet.findOne({ _id: betId });
+        const bet = await this.betsRepository.findById(betId);
 
         if (!bet) {
             throw new AppError('Bet not found', 404);
@@ -80,7 +83,7 @@ class UpdateBetService {
         bet.bet_value = newBet.bet_value;
         bet.bets = newBet.bets;
 
-        await bet.save();
+        await this.betsRepository.save(bet);
 
         return bet;
     }

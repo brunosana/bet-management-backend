@@ -1,4 +1,5 @@
-import { Bet, IBet } from '@modules/bets/models/Bet';
+import { IBet } from '@modules/bets/models/Bet';
+import { IBetsRepository } from '@modules/bets/repositories/IBetsRepository';
 import { Option } from '@modules/options/models/Option';
 import { User } from '@modules/users/models/User';
 
@@ -17,6 +18,8 @@ interface IRequest {
 }
 
 class CreateBetService {
+    constructor(private betsRepository: IBetsRepository) {}
+
     public async execute({ bet_value, bets, userId }: IRequest): Promise<IBet> {
         if (!userId) {
             throw new AppError('You must be logged to create a bet', 401);
@@ -61,7 +64,7 @@ class CreateBetService {
             }
         });
 
-        const bet = await Bet.create({
+        const bet = await this.betsRepository.create({
             bets,
             bet_value,
             user: userId,
