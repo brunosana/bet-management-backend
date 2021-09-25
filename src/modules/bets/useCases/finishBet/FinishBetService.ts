@@ -1,4 +1,5 @@
-import { Bet, IBet } from '@modules/bets/models/Bet';
+import { IBet } from '@modules/bets/models/Bet';
+import { IBetsRepository } from '@modules/bets/repositories/IBetsRepository';
 import { User } from '@modules/users/models/User';
 
 import { AppError } from '@shared/errors/AppError';
@@ -18,6 +19,8 @@ interface IRequest {
 }
 
 class FinishBetService {
+    constructor(private betsRepository: IBetsRepository) {}
+
     public async execute({ userId, betId, bets }: IRequest): Promise<IBet> {
         if (!userId) {
             throw new AppError('You must be logged to create a bet', 401);
@@ -38,7 +41,7 @@ class FinishBetService {
             throw new AppError('User not found', 404);
         }
 
-        const bet = await Bet.findOne({ _id: betId });
+        const bet = await this.betsRepository.findById(betId);
         if (!bet) {
             throw new AppError('Bet not found', 404);
         }
@@ -87,8 +90,7 @@ class FinishBetService {
         user.bets += 1;
         user.balance += bet.bet_value;
 
-        await bet.save();
-
+        await this.betsRepository.save(bet);
         await user.save();
 
         return bet;
