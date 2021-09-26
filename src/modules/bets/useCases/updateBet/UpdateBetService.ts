@@ -1,7 +1,6 @@
-import { IBet } from '@modules/bets/models/Bet';
-import { IBetsRepository } from '@modules/bets/repositories/IBetsRepository';
-import { IOptionsRepository } from '@modules/options/repositories/IOptionsRepository';
-import { IUsersRepository } from '@modules/users/repositories/IUsersRepository';
+import { Bet, IBet } from '@modules/bets/models/Bet';
+import { Option } from '@modules/options/models/Option';
+import { User } from '@modules/users/models/User';
 
 import { AppError } from '@shared/errors/AppError';
 
@@ -15,12 +14,6 @@ interface IRequest {
 }
 
 class UpdateBetService {
-    constructor(
-        private betsRepository: IBetsRepository,
-        private usersRepository: IUsersRepository,
-        private optionsRepository: IOptionsRepository,
-    ) {}
-
     public async execute({ betId, userId, newBet }: IRequest): Promise<IBet> {
         if (!userId) {
             throw new AppError('You must be logged to update a bet', 401);
@@ -43,13 +36,13 @@ class UpdateBetService {
         if (newBet.bet_value <= 0) {
             throw new AppError('Invalid Bet value');
         }
-        const user = await this.usersRepository.findById(userId);
+        const user = await User.findOne({ _id: userId });
 
         if (!user) {
             throw new AppError('User not found', 404);
         }
 
-        const bet = await this.betsRepository.findById(betId);
+        const bet = await Bet.findOne({ _id: betId });
 
         if (!bet) {
             throw new AppError('Bet not found', 404);
@@ -61,7 +54,7 @@ class UpdateBetService {
             );
         }
 
-        const options = await this.optionsRepository.all();
+        const options = await Option.find();
 
         for (let i = 0; i < bet.bets.length; i++) {
             const optionIndex = options.findIndex(
@@ -87,7 +80,7 @@ class UpdateBetService {
         bet.bet_value = newBet.bet_value;
         bet.bets = newBet.bets;
 
-        await this.betsRepository.save(bet);
+        await bet.save();
 
         return bet;
     }

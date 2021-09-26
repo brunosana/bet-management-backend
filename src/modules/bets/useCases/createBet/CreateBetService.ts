@@ -1,7 +1,6 @@
-import { IBet } from '@modules/bets/models/Bet';
-import { IBetsRepository } from '@modules/bets/repositories/IBetsRepository';
-import { IOptionsRepository } from '@modules/options/repositories/IOptionsRepository';
-import { IUsersRepository } from '@modules/users/repositories/IUsersRepository';
+import { Bet, IBet } from '@modules/bets/models/Bet';
+import { Option } from '@modules/options/models/Option';
+import { User } from '@modules/users/models/User';
 
 import { AppError } from '@shared/errors/AppError';
 
@@ -18,12 +17,6 @@ interface IRequest {
 }
 
 class CreateBetService {
-    constructor(
-        private betsRepository: IBetsRepository,
-        private usersRepository: IUsersRepository,
-        private optionsRepository: IOptionsRepository,
-    ) {}
-
     public async execute({ bet_value, bets, userId }: IRequest): Promise<IBet> {
         if (!userId) {
             throw new AppError('You must be logged to create a bet', 401);
@@ -41,13 +34,13 @@ class CreateBetService {
             throw new AppError('Invalid Bet value');
         }
 
-        const user = await this.usersRepository.findById(userId);
+        const user = await User.findOne({ _id: userId });
 
         if (!user) {
             throw new AppError('User not found', 404);
         }
 
-        const options = await this.optionsRepository.all();
+        const options = await Option.find();
 
         bets.forEach(bet => {
             const optionIndex = options.findIndex(op => op.id === bet.option);
@@ -68,7 +61,7 @@ class CreateBetService {
             }
         });
 
-        const bet = await this.betsRepository.create({
+        const bet = await Bet.create({
             bets,
             bet_value,
             user: userId,

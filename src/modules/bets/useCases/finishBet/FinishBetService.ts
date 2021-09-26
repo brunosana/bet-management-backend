@@ -1,6 +1,5 @@
-import { IBet } from '@modules/bets/models/Bet';
-import { IBetsRepository } from '@modules/bets/repositories/IBetsRepository';
-import { IUsersRepository } from '@modules/users/repositories/IUsersRepository';
+import { Bet, IBet } from '@modules/bets/models/Bet';
+import { User } from '@modules/users/models/User';
 
 import { AppError } from '@shared/errors/AppError';
 
@@ -19,11 +18,6 @@ interface IRequest {
 }
 
 class FinishBetService {
-    constructor(
-        private betsRepository: IBetsRepository,
-        private usersRepository: IUsersRepository,
-    ) {}
-
     public async execute({ userId, betId, bets }: IRequest): Promise<IBet> {
         if (!userId) {
             throw new AppError('You must be logged to create a bet', 401);
@@ -38,13 +32,13 @@ class FinishBetService {
             throw new AppError('You must to be send some bets');
         }
 
-        const user = await this.usersRepository.findById(userId);
+        const user = await User.findOne({ _id: userId });
 
         if (!user) {
             throw new AppError('User not found', 404);
         }
 
-        const bet = await this.betsRepository.findById(betId);
+        const bet = await Bet.findOne({ _id: betId });
         if (!bet) {
             throw new AppError('Bet not found', 404);
         }
@@ -93,8 +87,9 @@ class FinishBetService {
         user.bets += 1;
         user.balance += bet.bet_value;
 
-        await this.betsRepository.save(bet);
-        await this.usersRepository.save(user);
+        await bet.save();
+
+        await user.save();
 
         return bet;
     }

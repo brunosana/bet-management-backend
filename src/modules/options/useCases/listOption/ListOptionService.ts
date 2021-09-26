@@ -1,11 +1,8 @@
-import { IOption } from '@modules/options/models/Option';
-import { IOptionsRepository } from '@modules/options/repositories/IOptionsRepository';
+import { Option, IOption } from '@modules/options/models/Option';
 
 class ListOptionService {
-    constructor(private optionsRepository: IOptionsRepository) {}
-
     public async execute(): Promise<Array<IOption>> {
-        const options = await this.optionsRepository.all();
+        const options = await Option.find();
         return options;
     }
 }
