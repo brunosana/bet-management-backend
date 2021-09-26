@@ -1,4 +1,5 @@
-import { IUser, User } from '@modules/users/models/User';
+import { IUser } from '@modules/users/models/User';
+import { IUsersRepository } from '@modules/users/repositories/IUsersRepository';
 import { compare } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 
@@ -15,6 +16,8 @@ interface IResponse {
 }
 
 class AuthenticateUserService {
+    constructor(private usersRepository: IUsersRepository) {}
+
     public async execute({ email, password }: IRequest): Promise<IResponse> {
         if (!email) {
             throw new AppError('Email required');
@@ -26,7 +29,7 @@ class AuthenticateUserService {
             throw new AppError('Passowrd must be at more than 8 characters');
         }
 
-        const user = await User.findOne({ email });
+        const user = await this.usersRepository.findByEmail(email);
         if (!user) {
             throw new AppError('Email or Password incorrect');
         }
