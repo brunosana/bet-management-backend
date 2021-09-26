@@ -1,7 +1,7 @@
 import { IUser } from '@modules/users/models/User';
 import { Schema, model, Document } from 'mongoose';
 
-interface IUserMongodb extends IUser, Document {
+interface IUserMongo extends IUser, Document {
     id: string;
 }
 
@@ -42,4 +42,4 @@ const UserSchema = new Schema(
 
 const User = model<IUser>('users', UserSchema);
 
-export { User, IUserMongodb };
+export { User, IUserMongo };

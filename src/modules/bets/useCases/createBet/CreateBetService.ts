@@ -1,6 +1,6 @@
 import { IBet } from '@modules/bets/models/Bet';
 import { IBetsRepository } from '@modules/bets/repositories/IBetsRepository';
-import { Option } from '@modules/options/models/Option';
+import { IOptionsRepository } from '@modules/options/repositories/IOptionsRepository';
 import { IUsersRepository } from '@modules/users/repositories/IUsersRepository';
 
 import { AppError } from '@shared/errors/AppError';
@@ -21,6 +21,7 @@ class CreateBetService {
     constructor(
         private betsRepository: IBetsRepository,
         private usersRepository: IUsersRepository,
+        private optionsRepository: IOptionsRepository,
     ) {}
 
     public async execute({ bet_value, bets, userId }: IRequest): Promise<IBet> {
@@ -46,7 +47,7 @@ class CreateBetService {
             throw new AppError('User not found', 404);
         }
 
-        const options = await Option.find();
+        const options = await this.optionsRepository.all();
 
         bets.forEach(bet => {
             const optionIndex = options.findIndex(op => op.id === bet.option);

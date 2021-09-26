@@ -1,6 +1,6 @@
 import { IBet } from '@modules/bets/models/Bet';
 import { IBetsRepository } from '@modules/bets/repositories/IBetsRepository';
-import { Option } from '@modules/options/models/Option';
+import { IOptionsRepository } from '@modules/options/repositories/IOptionsRepository';
 import { IUsersRepository } from '@modules/users/repositories/IUsersRepository';
 
 import { AppError } from '@shared/errors/AppError';
@@ -18,6 +18,7 @@ class UpdateBetService {
     constructor(
         private betsRepository: IBetsRepository,
         private usersRepository: IUsersRepository,
+        private optionsRepository: IOptionsRepository,
     ) {}
 
     public async execute({ betId, userId, newBet }: IRequest): Promise<IBet> {
@@ -60,7 +61,7 @@ class UpdateBetService {
             );
         }
 
-        const options = await Option.find();
+        const options = await this.optionsRepository.all();
 
         for (let i = 0; i < bet.bets.length; i++) {
             const optionIndex = options.findIndex(
