@@ -1,4 +1,5 @@
-import { IUser, User } from '@modules/users/models/User';
+import { IUser } from '@modules/users/models/User';
+import { IUsersRepository } from '@modules/users/repositories/IUsersRepository';
 import { compare, hash } from 'bcrypt';
 
 import { AppError } from '@shared/errors/AppError';
@@ -14,6 +15,8 @@ interface IRequest {
 }
 
 class UpdateUserService {
+    constructor(private usersRepository: IUsersRepository) {}
+
     public async execute({
         userId,
         newUser,
@@ -27,7 +30,7 @@ class UpdateUserService {
             throw new AppError('User required to update');
         }
 
-        const user = await User.findOne({ _id: userId });
+        const user = await this.usersRepository.findById(userId);
 
         if (!user) {
             throw new AppError('User not found', 401);
@@ -38,7 +41,9 @@ class UpdateUserService {
         }
 
         if (newUser.email && user.email !== newUser.email) {
-            const emailExists = await User.findOne({ email: newUser.email });
+            const emailExists = await this.usersRepository.findByEmail(
+                newUser.email,
+            );
             if (emailExists) {
                 throw new AppError('Email already exists');
             }
@@ -61,7 +66,7 @@ class UpdateUserService {
             user.name = newUser.name;
         }
 
-        await user.save();
+        await this.usersRepository.save(user);
 
         user.password = undefined;
 

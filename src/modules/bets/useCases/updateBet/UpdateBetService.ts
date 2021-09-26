@@ -1,7 +1,7 @@
 import { IBet } from '@modules/bets/models/Bet';
 import { IBetsRepository } from '@modules/bets/repositories/IBetsRepository';
-import { Option } from '@modules/options/models/Option';
-import { User } from '@modules/users/models/User';
+import { IOptionsRepository } from '@modules/options/repositories/IOptionsRepository';
+import { IUsersRepository } from '@modules/users/repositories/IUsersRepository';
 
 import { AppError } from '@shared/errors/AppError';
 
@@ -15,7 +15,11 @@ interface IRequest {
 }
 
 class UpdateBetService {
-    constructor(private betsRepository: IBetsRepository) {}
+    constructor(
+        private betsRepository: IBetsRepository,
+        private usersRepository: IUsersRepository,
+        private optionsRepository: IOptionsRepository,
+    ) {}
 
     public async execute({ betId, userId, newBet }: IRequest): Promise<IBet> {
         if (!userId) {
@@ -39,7 +43,7 @@ class UpdateBetService {
         if (newBet.bet_value <= 0) {
             throw new AppError('Invalid Bet value');
         }
-        const user = await User.findOne({ _id: userId });
+        const user = await this.usersRepository.findById(userId);
 
         if (!user) {
             throw new AppError('User not found', 404);
@@ -57,7 +61,7 @@ class UpdateBetService {
             );
         }
 
-        const options = await Option.find();
+        const options = await this.optionsRepository.all();
 
         for (let i = 0; i < bet.bets.length; i++) {
             const optionIndex = options.findIndex(

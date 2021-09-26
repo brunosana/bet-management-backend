@@ -1,4 +1,5 @@
-import { User, IUser } from '@modules/users/models/User';
+import { IUser } from '@modules/users/models/User';
+import { IUsersRepository } from '@modules/users/repositories/IUsersRepository';
 import { hash } from 'bcrypt';
 
 import { AppError } from '@shared/errors/AppError';
@@ -10,6 +11,8 @@ interface IRequest {
 }
 
 class CreateUserService {
+    constructor(private usersRepository: IUsersRepository) {}
+
     public async execute({ name, email, password }: IRequest): Promise<IUser> {
         if (!name) {
             throw new AppError('Name required');
@@ -24,9 +27,9 @@ class CreateUserService {
             throw new AppError('Password must be at more than 8 characters');
         }
 
-        const checkIfEmailExists = await User.findOne({
-            email: email.toLowerCase(),
-        });
+        const checkIfEmailExists = await this.usersRepository.findByEmail(
+            email.toLowerCase(),
+        );
 
         if (checkIfEmailExists) {
             throw new AppError('Email in use');
@@ -34,7 +37,7 @@ class CreateUserService {
 
         const hashedPassword = await hash(password, 8);
 
-        const user = await User.create({
+        const user = await this.usersRepository.create({
             name,
             email,
             password: hashedPassword,
