@@ -1,5 +1,5 @@
 import { IBetsRepository } from '@modules/bets/repositories/IBetsRepository';
-import { User } from '@modules/users/models/User';
+import { IUsersRepository } from '@modules/users/repositories/IUsersRepository';
 
 import { AppError } from '@shared/errors/AppError';
 
@@ -9,7 +9,10 @@ interface IRequest {
 }
 
 class DeleteBetService {
-    constructor(private betsRepository: IBetsRepository) {}
+    constructor(
+        private betsRepository: IBetsRepository,
+        private usersRepository: IUsersRepository,
+    ) {}
 
     public async execute({ betId, userId }: IRequest): Promise<void> {
         if (!userId) {
@@ -23,7 +26,7 @@ class DeleteBetService {
             throw new AppError('Bet Id required');
         }
 
-        const user = await User.findOne({ _id: userId });
+        const user = await this.usersRepository.findById(userId);
 
         if (!user) {
             throw new AppError('User not found', 404);
@@ -58,7 +61,7 @@ class DeleteBetService {
         }
 
         user.bets -= 1;
-        await user.save();
+        await this.usersRepository.save(user);
         await this.betsRepository.delete(bet.id);
         return null;
     }

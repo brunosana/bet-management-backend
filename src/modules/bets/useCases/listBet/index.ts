@@ -3,8 +3,8 @@ import { MongodbBetsRepository } from '@modules/bets/repositories/implementation
 import { ListBetController } from './ListBetController';
 import { ListBetService } from './ListBetService';
 
-const mongodbBetsRepository = MongodbBetsRepository.getInstance();
-const listBetService = new ListBetService(mongodbBetsRepository);
+const betsRepository = MongodbBetsRepository.getInstance();
+const listBetService = new ListBetService(betsRepository);
 const listBetController = new ListBetController(listBetService);
 
 export { listBetController };
