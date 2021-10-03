@@ -13,7 +13,7 @@ export default {
 
     // Stop running tests after `n` failures
 
-    // bail: 0,
+    bail: true,
 
     // The directory where Jest should store its cached dependency information
 
@@ -87,7 +87,12 @@ export default {
 
     // A set of global variables that need to be available in all test environments
 
-    // globals: {},
+    globals: {
+        'ts-jest': {
+            tsconfig: '<rootDir>/tsconfig.json',
+            isolatedModules: true,
+        },
+    },
 
     // The maximum amount of workers used to run your tests. Can be specified as % or a number. E.g. maxWorkers: 10% will use 10% of your CPU amount + 1 as the maximum worker number. maxWorkers: 2 will use a maximum of 2 workers.
 
@@ -121,7 +126,11 @@ export default {
 
     // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
 
-    // moduleNameMapper: {},
+    moduleNameMapper: {
+        '^@modules/(.*)$': '<rootDir>/src/modules/$1',
+        '^@config/(.*)$': '<rootDir>/src/config/$1',
+        '^@shared/(.*)$': '<rootDir>/src/shared/$1',
+    },
 
     // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
 
@@ -169,11 +178,7 @@ export default {
 
     // A list of paths to directories that Jest should use to search for files in
 
-    // roots: [
-
-    //   "<rootDir>"
-
-    // ],
+    roots: ['<rootDir>'],
 
     // Allows you to use a custom runner instead of Jest's default test runner
 
@@ -181,7 +186,7 @@ export default {
 
     // The paths to modules that run some code to configure or set up the testing environment before each test
 
-    // setupFiles: [],
+    setupFiles: ['dotenv/config'],
 
     // A list of paths to modules that run some code to configure or set up the testing framework before each test
 
@@ -197,7 +202,7 @@ export default {
 
     // The test environment that will be used for testing
 
-    // testEnvironment: "jest-environment-node",
+    testEnvironment: 'node',
 
     // Options that will be passed to the testEnvironment
 
@@ -209,11 +214,7 @@ export default {
 
     // The glob patterns Jest uses to detect test files
 
-    testMatch: [
-        '**/__tests__/**/*.[jt]s?(x)',
-
-        '**/?(*.)+(spec|test).[tj]s?(x)',
-    ],
+    testMatch: ['**/*.spec.ts'],
 
     // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
 
@@ -245,7 +246,9 @@ export default {
 
     // A map from regular expressions to paths to transformers
 
-    // transform: undefined,
+    transform: {
+        '^.+\\.(ts|tsx)$': 'ts-jest',
+    },
 
     // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
 
