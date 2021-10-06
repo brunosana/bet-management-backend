@@ -1,5 +1,5 @@
 name: Pre Commit Bet System
-on: [pull_request]
+on: [push]
 jobs:
   test:
     runs-on: ubuntu-latest
