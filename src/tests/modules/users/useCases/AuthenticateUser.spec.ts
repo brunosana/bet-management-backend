@@ -18,6 +18,7 @@ describe('Authenticate User', () => {
             password: 'thePassword',
             name: 'Name Tester',
         });
+        process.env.SECRET = 'yoursecrethjere';
     });
 
     it('Should be able to authenticate User', async () => {
