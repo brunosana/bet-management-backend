@@ -14,7 +14,7 @@ dotenv.config();
 app.use(Express.json());
 
 app.get('/', (request, response) => {
-    return response.json({ message: 'Done' });
+    return response.json({ message: 'Working' });
 });
 
 app.use('/api', routes);
