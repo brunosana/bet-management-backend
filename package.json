@@ -3,6 +3,17 @@
   "version": "1.0.0",
   "main": "dist/shared/infra/http/server.js",
   "license": "MIT",
+  "author": {
+      "name": "Bruno Sana",
+      "url": "http://brunosana.com.br"
+  },
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/brunosana/bet-management-backend"
+  },
+  "bugs": {
+      "url": "https://github.com/brunosana/bet-management-backend/issues"
+  },
   "scripts": {
     "dev:server": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/infra/http/server.ts",
     "start": "node main",
