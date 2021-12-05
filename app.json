@@ -1,0 +1,14 @@
+{
+  "name": "betcontrol",
+  "displayName": "betcontrol",
+  "expo": {
+    "name": "betcontrol",
+    "slug": "betcontrol",
+    "scheme": "betcontrol",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "owner": "brunosana"
+  }
+}
