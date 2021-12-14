@@ -2,6 +2,7 @@ import { authenticateUserController } from '@modules/users/useCases/authenticate
 import { createUserController } from '@modules/users/useCases/createUser';
 import { getUserController } from '@modules/users/useCases/getUser';
 import { updateUserController } from '@modules/users/useCases/updateUser';
+import { authenticateUserWithGoogle } from '@modules/users/useCases/authenticateWithGoogle';
 import { Router } from 'express';
 
 import isAuthenticated from '../middlewares/isAuthenticated';
@@ -14,6 +15,10 @@ usersRouter.post('/', async (request, response) => {
 
 usersRouter.post('/auth', async (request, response) => {
     await authenticateUserController.handle(request, response);
+});
+
+usersRouter.post('/googleauth', async (request, response) => {
+    await authenticateUserWithGoogle.handle(request, response);
 });
 
 usersRouter.use(isAuthenticated);
