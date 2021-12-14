@@ -1,7 +1,7 @@
 {
   "name": "apostas",
   "version": "1.0.0",
-  "main": "dist/shared/infra/http/server.js",
+  "main": "./dist/shared/infra/http/server.js",
   "license": "MIT",
   "scripts": {
     "dev:server": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/infra/http/server.ts",
