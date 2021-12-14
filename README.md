@@ -1,4 +1,5 @@
 # BETs Management Backend
+![On Push](https://github.com/brunosana/bet-management-backend/actions/workflows/on-push.yml/badge.svg)
 
 ## Technologies
 
