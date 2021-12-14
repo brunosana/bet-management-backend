@@ -6,7 +6,7 @@
   "scripts": {
     "dev:server": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/infra/http/server.ts",
     "build": "tsc",
-    "start": "node dist/shared/infra/http/server.js",
+    "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register dist/shared/infra/http/server.js",
     "deploy": "node dist/shared/infra/http/server.js",
     "test": "jest --verbose"
   },
@@ -21,7 +21,8 @@
     "mongoose": "^6.0.5",
     "reflect-metadata": "^0.1.13",
     "ts-jest": "^27.0.5",
-    "tsconfig-paths": "^3.11.0",
+    "ts-node": "^10.4.0",
+    "tsconfig-paths": "^3.12.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
