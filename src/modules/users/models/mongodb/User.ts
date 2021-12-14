@@ -19,8 +19,16 @@ const UserSchema = new Schema(
         },
         password: {
             type: String,
-            required: true,
+            required: false,
             minlength: 8,
+        },
+        googleAuth: {
+            type: Boolean,
+            default: false,
+        },
+        googleId: {
+            type: String,
+            required: false,
         },
         balance: {
             type: Number,

@@ -2,6 +2,7 @@ import { User } from '@modules/users/models/mongodb/User';
 import { IUser } from '@modules/users/models/User';
 
 import { ICreateUser } from '../irequests/ICreateUser';
+import { ICreateGoogleUser } from '../irequests/ICreateGoogleUser';
 import { IUsersRepository } from '../IUsersRepository';
 
 class MongodbUsersRepository implements IUsersRepository {
@@ -30,6 +31,16 @@ class MongodbUsersRepository implements IUsersRepository {
             name,
             email,
             password,
+        });
+        return user;
+    }
+
+    async createGoogleUser({ name, email, googleId }: ICreateGoogleUser): Promise<IUser> {
+        const user = await User.create({
+            name,
+            email,
+            googleId,
+            googleAuth: true
         });
         return user;
     }
