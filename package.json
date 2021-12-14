@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev:server": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/infra/http/server.ts",
-    "start": "node main",
-    "deploy": "node main",
+    "start": "node ./dist/shared/infra/http/server.js",
+    "deploy": "node ./dist/shared/infra/http/server.js",
     "test": "jest --verbose"
   },
   "dependencies": {
