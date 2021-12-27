@@ -96,6 +96,47 @@ class InMemoryBetsRepository implements IBetsRepository {
             user: this.bets[index].user,
         } as IBet;
     }
+
+    async findByOpened(id: string): Promise<IBet[]> {
+        const bets: IBet[] = [];
+
+        // eslint-disable-next-line
+        this.bets.map(bet => {
+            if (bet.user === id && bet.finished) {
+                bets.push({
+                    id: bet.id,
+                    bet_value: bet.bet_value,
+                    bets: bet.bets,
+                    finished: bet.finished,
+                    status: bet.status,
+                    user: bet.user,
+                });
+            }
+        });
+        return bets;
+    }
+
+    async findByUserLimit(id: string, max: number): Promise<IBet[]> {
+        const bets: IBet[] = [];
+
+        // eslint-disable-next-line
+        this.bets.map(bet => {
+            if (bet.user === id) {
+                bets.push({
+                    id: bet.id,
+                    bet_value: bet.bet_value,
+                    bets: bet.bets,
+                    finished: bet.finished,
+                    status: bet.status,
+                    user: bet.user,
+                });
+            }
+        });
+        if (bets.length <= max) {
+            return bets;
+        }
+        return bets.splice(max, bets.length - max);
+    }
 }
 
 export { InMemoryBetsRepository };

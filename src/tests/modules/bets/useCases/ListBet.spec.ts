@@ -80,14 +80,22 @@ describe('List Bets', () => {
     });
 
     it('Should be able to List Bets', async () => {
-        const response = await listBetService.execute(user.id);
+        const response = await listBetService.execute({
+            id: user.id,
+            max: undefined,
+            opened: undefined,
+        });
 
         expect(response).toHaveLength(3);
     });
 
     it('Should not be able to List Bets if not logged', async () => {
         try {
-            await listBetService.execute(undefined);
+            await listBetService.execute({
+                id: undefined,
+                max: undefined,
+                opened: undefined,
+            });
         } catch (error) {
             expect(error).toBeInstanceOf(AppError);
             expect(error).toHaveProperty(
@@ -114,7 +122,11 @@ describe('List Bets', () => {
             bet_value: 15,
             userId: fakeUser.id,
         });
-        const response = await listBetService.execute(user.id);
+        const response = await listBetService.execute({
+            id: user.id,
+            max: undefined,
+            opened: undefined,
+        });
 
         expect(response).toHaveLength(3);
     });

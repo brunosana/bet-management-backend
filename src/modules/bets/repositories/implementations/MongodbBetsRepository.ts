@@ -54,6 +54,19 @@ class MongodbBetsRepository implements IBetsRepository {
     async delete(id: string): Promise<void> {
         await Bet.findOneAndRemove({ _id: id });
     }
+
+    async findByOpened(id: string): Promise<IBet[]> {
+        const bets = await Bet.find({
+            user: id,
+            finished: false,
+        });
+        return bets;
+    }
+
+    async findByUserLimit(id: string, max: number): Promise<IBet[]> {
+        const bets = await Bet.find({ user: id }).limit(max);
+        return bets;
+    }
 }
 
 export { MongodbBetsRepository };

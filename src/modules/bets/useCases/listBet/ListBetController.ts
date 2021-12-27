@@ -7,7 +7,15 @@ class ListBetController {
 
     async handle(request: Request, response: Response): Promise<Response> {
         const { id } = request.user;
-        const bets = await this.listBetService.execute(id);
+        const { opened, max } = request.query as {
+            opened: string;
+            max: string;
+        };
+        const bets = await this.listBetService.execute({
+            id,
+            max,
+            opened,
+        });
         return response.json(bets);
     }
 }
