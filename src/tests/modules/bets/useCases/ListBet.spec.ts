@@ -80,7 +80,11 @@ describe('List Bets', () => {
     });
 
     it('Should be able to List Bets', async () => {
-        const response = await listBetService.execute(user.id);
+        const response = await listBetService.execute({
+            id: user.id,
+            max: undefined,
+            opened: undefined,
+        });
 
         expect(response).toHaveLength(3);
     });
@@ -114,7 +118,11 @@ describe('List Bets', () => {
             bet_value: 15,
             userId: fakeUser.id,
         });
-        const response = await listBetService.execute(user.id);
+        const response = await listBetService.execute({
+            id: user.id,
+            max: undefined,
+            opened: undefined,
+        });
 
         expect(response).toHaveLength(3);
     });

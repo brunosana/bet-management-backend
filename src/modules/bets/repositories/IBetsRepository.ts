@@ -7,6 +7,8 @@ interface IBetsRepository {
     delete(id: string): Promise<void>;
     findById(id: string): Promise<IBet>;
     findByUser(id: string): Promise<Array<IBet>>;
+    findByUserLimit(id: string, max: number): Promise<Array<IBet>>;
+    findByOpened(id: string): Promise<Array<IBet>>;
     save(bet: IBet): Promise<IBet>;
 }
 
