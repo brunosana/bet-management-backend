@@ -82,7 +82,11 @@ describe('Delete Bet', () => {
             betId: bet.id,
             userId: user.id,
         });
-        const response = await listBetService.execute(user.id);
+        const response = await listBetService.execute({
+            id: user.id,
+            max: undefined,
+            opened: undefined,
+        });
 
         expect(response).toHaveLength(0);
     });
@@ -107,7 +111,11 @@ describe('Delete Bet', () => {
             userId: user.id,
         });
         const newUser = await getUserService.execute(user.id);
-        const response = await listBetService.execute(user.id);
+        const response = await listBetService.execute({
+            id: user.id,
+            max: undefined,
+            opened: undefined,
+        });
 
         expect(newUser).toHaveProperty('balance', user.balance);
         expect(newUser).toHaveProperty('bets', user.bets);
