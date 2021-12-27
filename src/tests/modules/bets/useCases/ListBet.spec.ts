@@ -91,7 +91,11 @@ describe('List Bets', () => {
 
     it('Should not be able to List Bets if not logged', async () => {
         try {
-            await listBetService.execute(undefined);
+            await listBetService.execute({
+                id: undefined,
+                max: undefined,
+                opened: undefined,
+            });
         } catch (error) {
             expect(error).toBeInstanceOf(AppError);
             expect(error).toHaveProperty(
