@@ -17,8 +17,16 @@ class ListBetService {
         }
         let bets = [] as Array<IBet>;
 
-        if (opened) {
-            bets = await this.betsRepository.findByOpened(id);
+        if (opened === 'true') {
+            bets = await this.betsRepository.findByOpened({ id, opened: true });
+            return bets;
+        }
+
+        if (opened === 'false') {
+            bets = await this.betsRepository.findByOpened({
+                id,
+                opened: false,
+            });
             return bets;
         }
 
