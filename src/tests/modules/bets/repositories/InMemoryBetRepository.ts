@@ -1,6 +1,7 @@
 import { IBet } from '@modules/bets/models/Bet';
 import { IBetsRepository } from '@modules/bets/repositories/IBetsRepository';
 import { ICreateBet } from '@modules/bets/repositories/irequests/ICreateBet';
+import { IListBetFilter } from '@modules/bets/repositories/irequests/IListBetFilter';
 
 import { generateUuid } from '@shared/utils/generateUuid';
 
@@ -97,12 +98,12 @@ class InMemoryBetsRepository implements IBetsRepository {
         } as IBet;
     }
 
-    async findByOpened(id: string): Promise<IBet[]> {
+    async findByOpened({ id, opened }: IListBetFilter): Promise<IBet[]> {
         const bets: IBet[] = [];
 
         // eslint-disable-next-line
         this.bets.map(bet => {
-            if (bet.user === id && bet.finished) {
+            if (bet.user === id && bet.finished === opened) {
                 bets.push({
                     id: bet.id,
                     bet_value: bet.bet_value,
