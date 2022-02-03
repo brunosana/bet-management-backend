@@ -17,12 +17,12 @@ class ListBetService {
         }
         let bets = [] as Array<IBet>;
 
-        if (opened === 'true') {
+        if (opened === 'true' && max === undefined) {
             bets = await this.betsRepository.findByOpened({ id, opened: true });
             return bets;
         }
 
-        if (opened === 'false') {
+        if (opened === 'false' && max === undefined) {
             bets = await this.betsRepository.findByOpened({
                 id,
                 opened: false,
@@ -30,11 +30,29 @@ class ListBetService {
             return bets;
         }
 
-        if (max && parseInt(max, 10) > 0) {
+        if (max && parseInt(max, 10) > 0 && opened === undefined) {
             bets = await this.betsRepository.findByUserLimit(
                 id,
                 parseInt(max, 10),
             );
+            return bets;
+        }
+
+        if (max && parseInt(max, 10) > 0 && opened === 'false') {
+            bets = await this.betsRepository.findByUserLimitAndOpened({
+                id,
+                max: parseInt(max, 10),
+                opened: false,
+            });
+            return bets;
+        }
+
+        if (max && parseInt(max, 10) > 0 && opened === 'true') {
+            bets = await this.betsRepository.findByUserLimitAndOpened({
+                id,
+                max: parseInt(max, 10),
+                opened: true,
+            });
             return bets;
         }
 
