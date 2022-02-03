@@ -65,7 +65,9 @@ class MongodbBetsRepository implements IBetsRepository {
     }
 
     async findByUserLimit(id: string, max: number): Promise<IBet[]> {
-        const bets = await Bet.find({ user: id }).limit(max);
+        const bets = await Bet.find({ user: id })
+            .sort({ createdAt: -1 })
+            .limit(max);
         return bets;
     }
 }
