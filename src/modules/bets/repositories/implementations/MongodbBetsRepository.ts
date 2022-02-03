@@ -3,7 +3,10 @@ import { Bet } from '@modules/bets/models/mongodb/Bet';
 
 import { IBetsRepository } from '../IBetsRepository';
 import { ICreateBet } from '../irequests/ICreateBet';
-import { IListBetFilter } from '../irequests/IListBetFilter';
+import {
+    IListBetFilter,
+    IListBetFilterWithMax,
+} from '../irequests/IListBetFilter';
 
 class MongodbBetsRepository implements IBetsRepository {
     private static INSTANCE: MongodbBetsRepository;
@@ -66,6 +69,17 @@ class MongodbBetsRepository implements IBetsRepository {
 
     async findByUserLimit(id: string, max: number): Promise<IBet[]> {
         const bets = await Bet.find({ user: id })
+            .sort({ createdAt: -1 })
+            .limit(max);
+        return bets;
+    }
+
+    async findByUserLimitAndOpened({
+        id,
+        max,
+        opened,
+    }: IListBetFilterWithMax): Promise<IBet[]> {
+        const bets = await Bet.find({ user: id, finished: opened })
             .sort({ createdAt: -1 })
             .limit(max);
         return bets;

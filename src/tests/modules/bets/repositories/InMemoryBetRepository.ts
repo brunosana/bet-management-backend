@@ -1,7 +1,10 @@
 import { IBet } from '@modules/bets/models/Bet';
 import { IBetsRepository } from '@modules/bets/repositories/IBetsRepository';
 import { ICreateBet } from '@modules/bets/repositories/irequests/ICreateBet';
-import { IListBetFilter } from '@modules/bets/repositories/irequests/IListBetFilter';
+import {
+    IListBetFilter,
+    IListBetFilterWithMax,
+} from '@modules/bets/repositories/irequests/IListBetFilter';
 
 import { generateUuid } from '@shared/utils/generateUuid';
 
@@ -128,6 +131,32 @@ class InMemoryBetsRepository implements IBetsRepository {
                     bet_value: bet.bet_value,
                     bets: bet.bets,
                     finished: bet.finished,
+                    status: bet.status,
+                    user: bet.user,
+                });
+            }
+        });
+        if (bets.length <= max) {
+            return bets;
+        }
+        return bets.splice(max, bets.length - max);
+    }
+
+    async findByUserLimitAndOpened({
+        id,
+        max,
+        opened,
+    }: IListBetFilterWithMax): Promise<IBet[]> {
+        const bets: IBet[] = [];
+
+        // eslint-disable-next-line
+        this.bets.map(bet => {
+            if (bet.user === id) {
+                bets.push({
+                    id: bet.id,
+                    bet_value: bet.bet_value,
+                    bets: bet.bets,
+                    finished: opened,
                     status: bet.status,
                     user: bet.user,
                 });
